@@ -1,0 +1,147 @@
+[
+  {
+    "id": "halifax-fb-1",
+    "name": "Halifax Food Bank",
+    "address": "3562 Windsor St, Halifax, NS B3K 5H6",
+    "city": "Halifax",
+    "province": "Nova Scotia", 
+    "postalCode": "B3K 5H6",
+    "phone": "(902) 457-1900",
+    "email": "contact@halifaxfoodbank.ca",
+    "website": "https://halifaxfoodbank.ca",
+    "coordinates": {
+      "latitude": 44.6488,
+      "longitude": -63.5752
+    },
+    "hours": {
+      "monday": "8:30 AM - 5:00 PM",
+      "tuesday": "8:30 AM - 5:00 PM", 
+      "wednesday": "8:30 AM - 5:00 PM",
+      "thursday": "8:30 AM - 5:00 PM",
+      "friday": "8:30 AM - 5:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialRequirements": ["Valid ID", "Income verification"],
+    "servicesOffered": ["Food hampers", "Baby formula", "Pet food", "Fresh produce"],
+    "culturalAccommodations": ["halal", "kosher", "vegetarian", "vegan"],
+    "accessibilityFeatures": ["Fully accessible", "Large parking lot", "Elevator access"],
+    "lastUpdated": "2025-10-17"
+  },
+  {
+    "id": "dartmouth-fb-1",
+    "name": "Dartmouth Community Food Bank",
+    "address": "45 Alderney Dr, Dartmouth, NS B2Y 2N6",
+    "city": "Dartmouth",
+    "province": "Nova Scotia",
+    "postalCode": "B2Y 2N6",
+    "phone": "(902) 466-3663",
+    "email": "info@dartmouthfoodbank.ca",
+    "website": "https://dartmouthfoodbank.ca",
+    "coordinates": {
+      "latitude": 44.6680,
+      "longitude": -63.5752
+    },
+    "hours": {
+      "monday": "9:00 AM - 4:00 PM",
+      "tuesday": "9:00 AM - 4:00 PM",
+      "wednesday": "9:00 AM - 4:00 PM",
+      "thursday": "9:00 AM - 4:00 PM",
+      "friday": "9:00 AM - 4:00 PM",
+      "saturday": "10:00 AM - 2:00 PM",
+      "sunday": "Closed"
+    },
+    "specialRequirements": ["ID required", "Proof of address"],
+    "servicesOffered": ["Emergency food", "Fresh produce", "Personal care items"],
+    "culturalAccommodations": ["halal", "kosher"],
+    "accessibilityFeatures": ["Wheelchair accessible", "Parking available"],
+    "lastUpdated": "2025-10-17"
+  },
+  {
+    "id": "sydney-fb-1", 
+    "name": "Cape Breton Food Bank",
+    "address": "1505 George St, Sydney, NS B1P 1P3",
+    "city": "Sydney",
+    "province": "Nova Scotia",
+    "postalCode": "B1P 1P3", 
+    "phone": "(902) 564-6500",
+    "email": "info@capebreton.foodbank.ca",
+    "website": "https://capebreton.foodbank.ca",
+    "coordinates": {
+      "latitude": 46.1351,
+      "longitude": -60.1831
+    },
+    "hours": {
+      "monday": "9:00 AM - 3:00 PM",
+      "tuesday": "9:00 AM - 3:00 PM",
+      "wednesday": "9:00 AM - 3:00 PM", 
+      "thursday": "9:00 AM - 3:00 PM",
+      "friday": "9:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialRequirements": ["Photo ID", "Proof of residence"],
+    "servicesOffered": ["Emergency food", "Clothing", "School supplies"],
+    "culturalAccommodations": ["indigenous", "vegetarian"],
+    "accessibilityFeatures": ["Wheelchair accessible", "Street parking"],
+    "lastUpdated": "2025-10-17"
+  },
+  {
+    "id": "truro-fb-1",
+    "name": "Truro Community Food Bank", 
+    "address": "629 Young St, Truro, NS B2N 5E5",
+    "city": "Truro",
+    "province": "Nova Scotia",
+    "postalCode": "B2N 5E5",
+    "phone": "(902) 895-3003",
+    "email": "help@trurofoodbank.ca", 
+    "website": "https://trurofoodbank.ca",
+    "coordinates": {
+      "latitude": 45.3669,
+      "longitude": -63.2759
+    },
+    "hours": {
+      "monday": "10:00 AM - 4:00 PM",
+      "tuesday": "10:00 AM - 4:00 PM",
+      "wednesday": "10:00 AM - 4:00 PM",
+      "thursday": "10:00 AM - 4:00 PM", 
+      "friday": "10:00 AM - 4:00 PM",
+      "saturday": "10:00 AM - 2:00 PM",
+      "sunday": "Closed"
+    },
+    "specialRequirements": ["ID required", "Appointment preferred"],
+    "servicesOffered": ["Food hampers", "Fresh bread", "Seasonal produce"],
+    "culturalAccommodations": ["vegan", "vegetarian", "organic"],
+    "accessibilityFeatures": ["Accessible entrance", "Close to public transit"],
+    "lastUpdated": "2025-10-17"
+  },
+  {
+    "id": "bridgewater-fb-1",
+    "name": "South Shore Food Bank",
+    "address": "394 King St, Bridgewater, NS B4V 1B3",
+    "city": "Bridgewater",
+    "province": "Nova Scotia",
+    "postalCode": "B4V 1B3",
+    "phone": "(902) 543-9935",
+    "email": "info@southshorefoodbank.ca",
+    "website": "https://southshorefoodbank.ca",
+    "coordinates": {
+      "latitude": 44.3767,
+      "longitude": -64.5233
+    },
+    "hours": {
+      "monday": "9:00 AM - 3:00 PM",
+      "tuesday": "9:00 AM - 3:00 PM",
+      "wednesday": "9:00 AM - 3:00 PM",
+      "thursday": "9:00 AM - 3:00 PM",
+      "friday": "9:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialRequirements": ["Valid ID", "Income verification"],
+    "servicesOffered": ["Food baskets", "Fresh seafood", "Local produce"],
+    "culturalAccommodations": ["vegetarian", "low-sodium"],
+    "accessibilityFeatures": ["Wheelchair accessible", "Parking lot"],
+    "lastUpdated": "2025-10-17"
+  }
+]

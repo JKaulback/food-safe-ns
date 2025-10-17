@@ -1,0 +1,78 @@
+{
+  "culturalCategories": [
+    {
+      "id": "halal",
+      "name": "Halal",
+      "description": "Prepared according to Islamic dietary laws",
+      "restrictions": ["No pork", "No alcohol", "Halal meat only"],
+      "commonFoods": ["Halal meat", "Rice", "Vegetables", "Halal-certified products"]
+    },
+    {
+      "id": "kosher",
+      "name": "Kosher",
+      "description": "Prepared according to Jewish dietary laws",
+      "restrictions": ["No pork", "No shellfish", "No mixing meat and dairy"],
+      "commonFoods": ["Kosher meat", "Fish with scales", "Vegetables", "Kosher-certified products"]
+    },
+    {
+      "id": "vegan",
+      "name": "Vegan",
+      "description": "No animal products or by-products",
+      "restrictions": ["No meat", "No dairy", "No eggs", "No honey", "No gelatin"],
+      "commonFoods": ["Fruits", "Vegetables", "Grains", "Legumes", "Plant-based alternatives"]
+    },
+    {
+      "id": "vegetarian",
+      "name": "Vegetarian",
+      "description": "No meat or fish, but may include dairy and eggs",
+      "restrictions": ["No meat", "No fish", "No poultry"],
+      "commonFoods": ["Vegetables", "Fruits", "Dairy", "Eggs", "Grains", "Legumes"]
+    },
+    {
+      "id": "hindu",
+      "name": "Hindu Dietary",
+      "description": "Various restrictions based on Hindu traditions",
+      "restrictions": ["Often no beef", "May be vegetarian", "No alcohol for some"],
+      "commonFoods": ["Vegetables", "Rice", "Lentils", "Dairy", "Fruits"]
+    },
+    {
+      "id": "indigenous",
+      "name": "Indigenous Traditional",
+      "description": "Traditional First Nations, Inuit, and Métis foods",
+      "restrictions": ["Varies by community"],
+      "commonFoods": ["Wild game", "Fish", "Traditional grains", "Indigenous vegetables"]
+    }
+  ],
+  "dietaryPreferences": [
+    {
+      "id": "organic",
+      "name": "Organic",
+      "description": "Organically grown without synthetic pesticides or fertilizers"
+    },
+    {
+      "id": "non-gmo",
+      "name": "Non-GMO",
+      "description": "Not genetically modified"
+    },
+    {
+      "id": "low-sodium",
+      "name": "Low Sodium",
+      "description": "Reduced sodium content for heart health"
+    },
+    {
+      "id": "diabetic-friendly",
+      "name": "Diabetic Friendly",
+      "description": "Low sugar, controlled carbohydrates"
+    },
+    {
+      "id": "baby-food",
+      "name": "Baby Food",
+      "description": "Appropriate for infants and toddlers"
+    },
+    {
+      "id": "senior-friendly",
+      "name": "Senior Friendly",
+      "description": "Easy to chew and digest for elderly"
+    }
+  ]
+}

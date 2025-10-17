@@ -1,0 +1,99 @@
+{
+  "allergens": [
+    {
+      "id": "dairy",
+      "name": "Dairy",
+      "description": "Contains milk or milk products",
+      "severity": "moderate",
+      "commonIn": ["cheese", "milk", "yogurt", "butter", "cream"]
+    },
+    {
+      "id": "gluten",
+      "name": "Gluten",
+      "description": "Contains wheat, barley, rye, or related grains",
+      "severity": "high",
+      "commonIn": ["bread", "pasta", "cereals", "beer", "soy sauce"]
+    },
+    {
+      "id": "nuts",
+      "name": "Tree Nuts",
+      "description": "Contains tree nuts (almonds, walnuts, pecans, etc.)",
+      "severity": "high",
+      "commonIn": ["mixed nuts", "nut oils", "marzipan", "nougat"]
+    },
+    {
+      "id": "peanuts",
+      "name": "Peanuts",
+      "description": "Contains peanuts or peanut products",
+      "severity": "high",
+      "commonIn": ["peanut butter", "peanut oil", "satay sauce"]
+    },
+    {
+      "id": "shellfish",
+      "name": "Shellfish",
+      "description": "Contains crustaceans or mollusks",
+      "severity": "high",
+      "commonIn": ["shrimp", "crab", "lobster", "mussels", "oysters"]
+    },
+    {
+      "id": "fish",
+      "name": "Fish",
+      "description": "Contains fish or fish products",
+      "severity": "moderate",
+      "commonIn": ["salmon", "tuna", "cod", "fish sauce", "anchovies"]
+    },
+    {
+      "id": "eggs",
+      "name": "Eggs",
+      "description": "Contains eggs or egg products",
+      "severity": "moderate",
+      "commonIn": ["mayonnaise", "pasta", "baked goods", "custard"]
+    },
+    {
+      "id": "soy",
+      "name": "Soy",
+      "description": "Contains soy or soy products",
+      "severity": "moderate",
+      "commonIn": ["soy sauce", "tofu", "tempeh", "edamame"]
+    },
+    {
+      "id": "sesame",
+      "name": "Sesame",
+      "description": "Contains sesame seeds or sesame oil",
+      "severity": "moderate",
+      "commonIn": ["tahini", "hummus", "sesame oil", "some breads"]
+    }
+  ],
+  "safeLabels": [
+    {
+      "id": "dairy-free",
+      "name": "Dairy-Free",
+      "description": "Does not contain milk or milk products"
+    },
+    {
+      "id": "gluten-free",
+      "name": "Gluten-Free", 
+      "description": "Does not contain wheat, barley, rye, or related grains"
+    },
+    {
+      "id": "nut-free",
+      "name": "Nut-Free",
+      "description": "Does not contain tree nuts or peanuts"
+    },
+    {
+      "id": "shellfish-free",
+      "name": "Shellfish-Free",
+      "description": "Does not contain shellfish"
+    },
+    {
+      "id": "egg-free",
+      "name": "Egg-Free",
+      "description": "Does not contain eggs"
+    },
+    {
+      "id": "soy-free",
+      "name": "Soy-Free",
+      "description": "Does not contain soy products"
+    }
+  ]
+}
