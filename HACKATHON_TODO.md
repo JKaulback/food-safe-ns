@@ -5,7 +5,11 @@
 ### 🏗️ **Day 1 - Foundation & Core Features (8-10 hours)**
 
 #### **Setup & Infrastructure (2 hours)**
+<<<<<<< HEAD
 - [X] **Project Setup & Structure** - Create folder structure, package.json files, install dependencies
+=======
+- [ ] **Project Setup & Structure** - Create folder structure, package.json files, install dependencies
+>>>>>>> 17c2aface44123eb4d291f1415b7544c8e19b81b
 - [ ] **Backend Foundation** - Express server, CORS, basic routing
 - [ ] **React App Setup** - Initialize React, install axios/react-router-dom, basic routing
 
