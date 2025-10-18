@@ -16,7 +16,7 @@ export const foodBankAPI = {
   // Search for food banks by location and filters
   searchFoodBanks: async (searchParams) => {
     try {
-      const { location, radius = 50, allergens, cultural } = searchParams;
+      const { location, radius = 25, allergens, cultural } = searchParams;
       
       console.log('🌐 Making API request to:', API_BASE_URL + '/api/search');
       
@@ -100,7 +100,7 @@ export const foodBankAPI = {
   },
 
   // Search by coordinates (for GPS location)
-  searchByCoordinates: async (latitude, longitude, radius = 50) => {
+  searchByCoordinates: async (latitude, longitude, radius = 25) => {
     try {
       const response = await api.get(`/api/search/nearby/${latitude}/${longitude}?radius=${radius}`);
       return response.data;

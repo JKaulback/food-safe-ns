@@ -8,6 +8,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [searchParams, setSearchParams] = useState(null); // Store search parameters
   const [error, setError] = useState('');
   const [serverStatus, setServerStatus] = useState('checking'); // 'checking', 'connected', 'disconnected'
 
@@ -36,6 +37,7 @@ const Home = () => {
     setLoading(true);
     setSearchPerformed(true);
     setError('');
+    setSearchParams(searchData); // Store the search parameters
     
     // If server is disconnected, skip API call and use demo data immediately
     if (serverStatus === 'disconnected') {
@@ -83,7 +85,7 @@ const Home = () => {
       // Call the real API
       const results = await foodBankAPI.searchFoodBanks({
         location: searchData.location,
-        radius: searchData.radius || 15,
+        radius: searchData.radius || 25,
         allergens: searchData.allergens,
         cultural: searchData.cultural
       });
@@ -296,7 +298,10 @@ const Home = () => {
               <>
                 <div style={{ marginBottom: '2rem' }}>
                   <button 
-                    onClick={() => setSearchPerformed(false)}
+                    onClick={() => {
+                      setSearchPerformed(false);
+                      setSearchParams(null);
+                    }}
                     style={{ 
                       background: 'none', 
                       border: 'none', 
@@ -311,11 +316,21 @@ const Home = () => {
                     ← Back to Search
                   </button>
                   <h2 style={{ margin: '1rem 0', fontSize: '1.5rem', fontWeight: '600' }}>
-                    Food Banks Near B3K 2T4
+                    Food Banks Near {searchParams?.location || 'B3K 2T4'}
                   </h2>
-                  <p style={{ color: 'var(--text-gray)' }}>
-                    Found {searchResults.length} food banks
+                  <p style={{ color: 'var(--text-gray)', marginBottom: '0.5rem' }}>
+                    Found {searchResults.length} food banks within {searchParams?.radius || 25} km
                   </p>
+                  {searchParams?.radius && (
+                    <p style={{ 
+                      color: 'var(--primary-green)', 
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      marginBottom: '1rem'
+                    }}>
+                      📍 Search radius: {searchParams.radius} kilometers
+                    </p>
+                  )}
                 </div>
                 
                 <div style={{ display: 'grid', gap: '1.5rem' }}>

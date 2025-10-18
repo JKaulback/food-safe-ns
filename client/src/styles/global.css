@@ -404,8 +404,32 @@ body {
     font-size: 1rem;
   }
   
-  .search-form {
+  .search-form > div {
     flex-direction: column;
+    align-items: stretch !important;
+    gap: 1rem !important;
+  }
+  
+  .search-form .search-input {
+    min-width: unset !important;
+    order: 1;
+  }
+  
+  .search-form > div > div:has(select) {
+    order: 2;
+    justify-content: center;
+    min-width: unset !important;
+  }
+  
+  .search-form .search-button {
+    order: 3;
+    width: 100%;
+  }
+  
+  .search-form .filters-button {
+    order: 4;
+    width: 100%;
+    justify-content: center;
   }
   
   .features-grid {

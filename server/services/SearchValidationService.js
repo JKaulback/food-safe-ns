@@ -28,7 +28,7 @@ class SearchValidationService {
    */
   validateRadius(radius) {
     if (!radius) {
-      return { isValid: true, value: 50 }; // Default value
+      return { isValid: true, value: 25 }; // Default value to match UI
     }
     
     const parsedRadius = parseInt(radius);
