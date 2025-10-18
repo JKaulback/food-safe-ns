@@ -35,6 +35,56 @@ export const getAllergens = (item) => {
 };
 
 /**
+ * Check if two allergens are synonyms (e.g., 'milk' and 'dairy')
+ * @param {string} allergen1 - First allergen
+ * @param {string} allergen2 - Second allergen  
+ * @returns {boolean} - Whether the allergens are synonyms
+ */
+export const areAllergensSynonyms = (allergen1, allergen2) => {
+  const allergenSynonyms = {
+    'dairy': ['milk', 'dairy'],
+    'milk': ['milk', 'dairy'],
+    'nuts': ['nuts', 'tree-nuts'],
+    'tree-nuts': ['nuts', 'tree-nuts'],
+    'shellfish': ['shellfish', 'crustaceans', 'molluscs'],
+    'crustaceans': ['shellfish', 'crustaceans', 'molluscs'],
+    'molluscs': ['shellfish', 'crustaceans', 'molluscs']
+  };
+  
+  const synonyms1 = allergenSynonyms[allergen1.toLowerCase()] || [allergen1.toLowerCase()];
+  const synonyms2 = allergenSynonyms[allergen2.toLowerCase()] || [allergen2.toLowerCase()];
+  
+  // Check if there's any overlap between the synonym groups
+  return synonyms1.some(syn1 => synonyms2.includes(syn1));
+};
+
+/**
+ * Check if an item contains any of the filtered allergens (including synonyms)
+ * @param {Object} item - Inventory item
+ * @param {Array} filterAllergens - Array of allergens to filter out
+ * @returns {boolean} - Whether the item contains any filtered allergens
+ */
+export const itemContainsFilteredAllergens = (item, filterAllergens) => {
+  if (!filterAllergens || filterAllergens.length === 0) {
+    return false;
+  }
+  
+  const itemAllergens = getAllergens(item);
+  
+  return itemAllergens.some(itemAllergen => {
+    return filterAllergens.some(filterAllergen => {
+      // Direct match
+      if (itemAllergen.toLowerCase() === filterAllergen.toLowerCase()) {
+        return true;
+      }
+      
+      // Check for synonyms
+      return areAllergensSynonyms(itemAllergen, filterAllergen);
+    });
+  });
+};
+
+/**
  * Get enhanced dietary tags
  * @param {Object} item - Inventory item
  * @returns {Array} - Combined dietary tags

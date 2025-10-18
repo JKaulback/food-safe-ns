@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { foodBankAPI, inventoryAPI, apiUtils } from '../services/api';
-import { getProductImage, getAllergens, getDietaryTags, getCategoryIcon, getDisplayName } from '../utils/productUtils';
+import { getProductImage, getAllergens, getDietaryTags, getCategoryIcon, getDisplayName, itemContainsFilteredAllergens } from '../utils/productUtils';
 
 const FoodBankDetails = () => {
   const { id } = useParams();
@@ -458,7 +458,7 @@ const FoodBankDetails = () => {
                 }}>
                   {inventory
                     .filter(item => !categoryFilter || item.category === categoryFilter)
-                    .filter(item => allergenFilter.length === 0 || !getAllergens(item).some(allergen => allergenFilter.includes(allergen)))
+                    .filter(item => !itemContainsFilteredAllergens(item, allergenFilter))
                     .map(item => (
                       <div
                         key={item.id}

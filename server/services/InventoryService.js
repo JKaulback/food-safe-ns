@@ -149,6 +149,75 @@ class InventoryService {
   }
 
   /**
+   * Get filtered inventory with allergen and category filters applied
+   * @param {string} foodBankId - The food bank ID
+   * @param {object} filters - Filter options (allergens, category)
+   * @returns {array} Filtered inventory items
+   */
+  getFilteredInventory(foodBankId, filters = {}) {
+    let items = this.getInventoryByFoodBank(foodBankId);
+    
+    // Apply category filter
+    if (filters.category) {
+      items = items.filter(item => item.category === filters.category);
+    }
+    
+    // Apply allergen filter - exclude items that contain any of the specified allergens
+    if (filters.allergens && filters.allergens.length > 0) {
+      items = items.filter(item => {
+        if (!item.allergens || item.allergens.length === 0) {
+          return true; // Items with no allergens are safe
+        }
+        
+        // Check if item contains any of the filtered allergens (including synonyms)
+        const hasFilteredAllergen = item.allergens.some(allergen => {
+          const normalizedItemAllergen = allergen.toLowerCase();
+          return filters.allergens.some(filterAllergen => {
+            const normalizedFilterAllergen = filterAllergen.toLowerCase();
+            
+            // Direct match
+            if (normalizedItemAllergen === normalizedFilterAllergen) {
+              return true;
+            }
+            
+            // Check for allergen synonyms
+            return this._areAllergensSynonyms(normalizedItemAllergen, normalizedFilterAllergen);
+          });
+        });
+        
+        return !hasFilteredAllergen; // Exclude items that contain filtered allergens
+      });
+    }
+    
+    return items;
+  }
+
+  /**
+   * Check if two allergens are synonyms (e.g., 'milk' and 'dairy')
+   * @private
+   * @param {string} allergen1 - First allergen
+   * @param {string} allergen2 - Second allergen  
+   * @returns {boolean} - Whether the allergens are synonyms
+   */
+  _areAllergensSynonyms(allergen1, allergen2) {
+    const allergenSynonyms = {
+      'dairy': ['milk', 'dairy'],
+      'milk': ['milk', 'dairy'],
+      'nuts': ['nuts', 'tree-nuts'],
+      'tree-nuts': ['nuts', 'tree-nuts'],
+      'shellfish': ['shellfish', 'crustaceans', 'molluscs'],
+      'crustaceans': ['shellfish', 'crustaceans', 'molluscs'],
+      'molluscs': ['shellfish', 'crustaceans', 'molluscs']
+    };
+    
+    const synonyms1 = allergenSynonyms[allergen1] || [allergen1];
+    const synonyms2 = allergenSynonyms[allergen2] || [allergen2];
+    
+    // Check if there's any overlap between the synonym groups
+    return synonyms1.some(syn1 => synonyms2.includes(syn1));
+  }
+
+  /**
    * Get enhanced inventory with OpenFoodFacts data and static fallbacks
    * @param {string} foodBankId - The food bank ID
    * @param {object} filters - Filter options (allergens, category)
