@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Routes
+app.use('/api/foodbanks', foodBankRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/search', searchRoutes);
 
