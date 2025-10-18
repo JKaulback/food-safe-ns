@@ -18,6 +18,8 @@ export const foodBankAPI = {
     try {
       const { location, radius = 50, allergens, cultural } = searchParams;
       
+      console.log('🌐 Making API request to:', API_BASE_URL + '/api/search');
+      
       const params = new URLSearchParams();
       if (location) params.append('location', location);
       if (radius) params.append('radius', radius.toString());
@@ -29,9 +31,15 @@ export const foodBankAPI = {
       }
 
       const response = await api.get(`/api/search?${params.toString()}`);
+      console.log('✅ Search API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Search API error:', error);
+      console.error('❌ Search API error:', error);
+      
+      if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+        throw new Error('Network error: Unable to connect to server. Please ensure the backend server is running on port 3000.');
+      }
+      
       throw new Error(error.response?.data?.error || 'Failed to search food banks');
     }
   },
@@ -163,8 +171,10 @@ export const apiUtils = {
 
     return searchResults.results.foodBanks.map(foodBank => ({
       ...foodBank,
+      tags: foodBank.tags || foodBank.services || ['Emergency Food', 'Community Support'], // Fallback tags
       formattedDistance: foodBank.distance ? `${foodBank.distance} km away` : '',
       formattedHours: foodBank.hours ? formatHours(foodBank.hours) : 'Hours not available',
+      hours: typeof foodBank.hours === 'string' ? foodBank.hours : formatHours(foodBank.hours), // Ensure hours is always a string
       availabilityText: getAvailabilityText(foodBank.availabilityStatus, foodBank.inventoryCount)
     }));
   }
@@ -174,10 +184,25 @@ export const apiUtils = {
 const formatHours = (hours) => {
   if (typeof hours === 'string') return hours;
   
-  const today = new Date().toLocaleLowerCase().substring(0, 3);
-  const todayHours = hours[today] || hours[Object.keys(hours)[0]];
+  if (!hours || typeof hours !== 'object') {
+    return 'Hours not available';
+  }
   
-  return todayHours || 'Hours not available';
+  // Get today's day name in full format (e.g., "monday", "tuesday")
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+  
+  // Try to get today's hours first
+  if (hours[today]) {
+    return `Today: ${hours[today]}`;
+  }
+  
+  // If today's hours not available, show the first available day
+  const firstDay = Object.keys(hours)[0];
+  if (firstDay && hours[firstDay]) {
+    return hours[firstDay];
+  }
+  
+  return 'Hours not available';
 };
 
 const getAvailabilityText = (status, count) => {

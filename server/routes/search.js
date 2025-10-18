@@ -10,12 +10,20 @@ const searchService = new FoodBankSearchService();
 // GET /api/search - Search for food banks by location
 router.get('/', async (req, res) => {
   try {
-    const searchParams = {
-      location: req.query.location,
-      radius: req.query.radius,
-      allergens: req.query.allergens,
-      cultural: req.query.cultural
+    // Ensure query parameters are strings, not arrays
+    const getStringParam = (param) => {
+      if (Array.isArray(param)) return param[0];
+      return param;
     };
+
+    const searchParams = {
+      location: getStringParam(req.query.location),
+      radius: getStringParam(req.query.radius),
+      allergens: getStringParam(req.query.allergens),
+      cultural: getStringParam(req.query.cultural)
+    };
+
+    console.log('Search params received:', searchParams);
 
     const searchResults = await searchService.search(searchParams, foodBanks);
     res.json(searchResults);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from '../components/SearchBar';
 import FoodBankCard from '../components/FoodBankCard';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -9,36 +9,43 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [error, setError] = useState('');
+  const [serverStatus, setServerStatus] = useState('checking'); // 'checking', 'connected', 'disconnected'
+
+  // Check server connectivity on component mount
+  useEffect(() => {
+    checkServerConnection();
+  }, []);
+
+  const checkServerConnection = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/test`);
+      if (response.ok) {
+        setServerStatus('connected');
+        console.log('✅ Server connection successful');
+      } else {
+        setServerStatus('disconnected');
+        console.warn('⚠️ Server responded but with error status');
+      }
+    } catch (error) {
+      setServerStatus('disconnected');
+      console.warn('⚠️ Server connection failed:', error.message);
+    }
+  };
 
   const handleSearch = async (searchData) => {
     setLoading(true);
     setSearchPerformed(true);
     setError('');
     
-    try {
-      // Call the real API
-      const results = await foodBankAPI.searchFoodBanks({
-        location: searchData.location,
-        radius: searchData.radius || 50,
-        allergens: searchData.allergens,
-        cultural: searchData.cultural
-      });
-      
-      // Format results for display
-      const formattedResults = apiUtils.formatSearchResults(results);
-      setSearchResults(formattedResults);
-      
-    } catch (error) {
-      console.error('Search error:', error);
-      setError(apiUtils.handleApiError(error));
-      
-      // Fallback to mock data for development if API fails
+    // If server is disconnected, skip API call and use demo data immediately
+    if (serverStatus === 'disconnected') {
+      console.log('🔄 Server offline, using demo data');
       setSearchResults([
         {
           id: 'halifax-fb-1',
-          name: 'Halifax Community Fridge',
+          name: 'Halifax Community Food Bank (Demo)',
           distance: '2.3 km away',
-          address: '1491 Carlton St, Halifax, NS B3H 3B7',
+          address: '1131 Barrington Street, Halifax, NS B3J 1Z5',
           phone: '(902) 457-1900',
           hours: 'Mon-Fri: 9AM-4PM, Sat: 10AM-2PM',
           tags: ['Canned Goods', 'Fresh Produce', 'Dairy', 'Frozen Items', 'Gluten-Free', 'Halal'],
@@ -47,6 +54,89 @@ const Home = () => {
           formattedDistance: '2.3 km away',
           formattedHours: 'Mon-Fri: 9AM-4PM, Sat: 10AM-2PM',
           availabilityText: '247 items available'
+        },
+        {
+          id: 'dartmouth-fb-1',
+          name: 'Dartmouth Food Bank (Demo)',
+          distance: '5.7 km away',
+          address: '4 Dundas Street, Dartmouth, NS B2Y 2V1',
+          phone: '(902) 466-2042',
+          hours: 'Tue-Thu: 10AM-4PM',
+          tags: ['Emergency Food', 'Family Support', 'Dairy-Free', 'Vegetarian'],
+          inventoryCount: 156,
+          availabilityStatus: 'moderate',
+          formattedDistance: '5.7 km away',
+          formattedHours: 'Tue-Thu: 10AM-4PM',
+          availabilityText: '156 items - Good selection'
+        }
+      ]);
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      console.log('🔍 Attempting to search food banks with API...', {
+        url: process.env.REACT_APP_API_URL,
+        searchData
+      });
+      
+      // Call the real API
+      const results = await foodBankAPI.searchFoodBanks({
+        location: searchData.location,
+        radius: searchData.radius || 15,
+        allergens: searchData.allergens,
+        cultural: searchData.cultural
+      });
+      
+      console.log('✅ API search successful:', results);
+      
+      // Format results for display
+      const formattedResults = apiUtils.formatSearchResults(results);
+      setSearchResults(formattedResults);
+      
+    } catch (error) {
+      console.error('❌ API search failed:', error);
+      
+      // Update server status if connection failed
+      setServerStatus('disconnected');
+      
+      // Check if it's a network/server connectivity issue
+      if (error.message?.includes('Network error') || error.message?.includes('connect')) {
+        setError('Server connection lost. Using demo data for now. Please start the backend server on port 3000.');
+        console.warn('⚠️ Server unavailable, showing demo data');
+      } else {
+        setError(apiUtils.handleApiError(error));
+      }
+      
+      // Fallback to mock data for development when server is not running
+      setSearchResults([
+        {
+          id: 'halifax-fb-1',
+          name: 'Halifax Community Food Bank (Demo)',
+          distance: '2.3 km away',
+          address: '1131 Barrington Street, Halifax, NS B3J 1Z5',
+          phone: '(902) 457-1900',
+          hours: 'Mon-Fri: 9AM-4PM, Sat: 10AM-2PM',
+          tags: ['Canned Goods', 'Fresh Produce', 'Dairy', 'Frozen Items', 'Gluten-Free', 'Halal'],
+          inventoryCount: 247,
+          availabilityStatus: 'high',
+          formattedDistance: '2.3 km away',
+          formattedHours: 'Mon-Fri: 9AM-4PM, Sat: 10AM-2PM',
+          availabilityText: '247 items available'
+        },
+        {
+          id: 'dartmouth-fb-1',
+          name: 'Dartmouth Food Bank (Demo)',
+          distance: '5.7 km away',
+          address: '4 Dundas Street, Dartmouth, NS B2Y 2V1',
+          phone: '(902) 466-2042',
+          hours: 'Tue-Thu: 10AM-4PM',
+          tags: ['Emergency Food', 'Family Support', 'Dairy-Free', 'Vegetarian'],
+          inventoryCount: 156,
+          availabilityStatus: 'moderate',
+          formattedDistance: '5.7 km away',
+          formattedHours: 'Tue-Thu: 10AM-4PM',
+          availabilityText: '156 items - Good selection'
         }
       ]);
     } finally {
@@ -63,6 +153,45 @@ const Home = () => {
           <p className="hero-subtitle">
             Connect with local food banks and discover available items that meet your dietary needs
           </p>
+          
+          {/* Server Status Indicator */}
+          <div style={{ 
+            marginTop: '1rem', 
+            padding: '0.5rem 1rem', 
+            borderRadius: '20px', 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '0.5rem',
+            fontSize: '0.875rem',
+            backgroundColor: serverStatus === 'connected' ? '#dcfce7' : 
+                           serverStatus === 'disconnected' ? '#fee2e2' : '#f3f4f6',
+            color: serverStatus === 'connected' ? '#166534' : 
+                   serverStatus === 'disconnected' ? '#991b1b' : '#6b7280',
+            border: `1px solid ${serverStatus === 'connected' ? '#bbf7d0' : 
+                                serverStatus === 'disconnected' ? '#fecaca' : '#e5e7eb'}`
+          }}>
+            <span>{serverStatus === 'connected' ? '🟢' : 
+                   serverStatus === 'disconnected' ? '🔴' : '🟡'}</span>
+            <span>
+              {serverStatus === 'connected' ? 'Live data available' : 
+               serverStatus === 'disconnected' ? 'Using demo data (server offline)' : 'Checking server...'}
+            </span>
+            {serverStatus === 'disconnected' && (
+              <button 
+                onClick={checkServerConnection}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#991b1b',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  fontSize: '0.875rem'
+                }}
+              >
+                Retry
+              </button>
+            )}
+          </div>
         </div>
       </section>
 

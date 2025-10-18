@@ -30,7 +30,10 @@ function postalCodeToCoordinates(postalCode) {
  * @returns {object|null} - {latitude, longitude, postalCodes} or null if not found
  */
 function cityToCoordinates(cityName) {
-  if (!cityName) return null;
+  if (!cityName || typeof cityName !== 'string') {
+    console.warn('cityToCoordinates: Invalid cityName provided:', cityName, 'Type:', typeof cityName);
+    return null;
+  }
   
   const cleanCity = cityName.toLowerCase().trim();
   

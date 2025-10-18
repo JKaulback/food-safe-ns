@@ -25,6 +25,9 @@ class FoodBankEnrichmentService {
 
     const enrichedFoodBank = { ...foodBank };
 
+    // Always add tags for consistency
+    enrichedFoodBank.tags = this._generateTagsForFoodBank(foodBank);
+
     if (includeInventoryCount) {
       enrichedFoodBank.inventoryCount = this.inventoryService.getInventoryCount(foodBank.id);
       enrichedFoodBank.totalQuantity = this.inventoryService.getTotalQuantity(foodBank.id);
@@ -74,7 +77,8 @@ class FoodBankEnrichmentService {
       return foodBanks.map(foodBank => ({
         ...foodBank,
         inventoryCount: inventoryCounts[foodBank.id] || 0,
-        totalQuantity: this.inventoryService.getTotalQuantity(foodBank.id)
+        totalQuantity: this.inventoryService.getTotalQuantity(foodBank.id),
+        tags: this._generateTagsForFoodBank(foodBank)
       }));
     }
 
@@ -145,6 +149,75 @@ class FoodBankEnrichmentService {
       if (totalQuantity < 200) return minLevel <= 2;
       return minLevel <= 3;
     });
+  }
+
+  /**
+   * Generate relevant tags for a food bank based on its inventory
+   * @private
+   */
+  _generateTagsForFoodBank(foodBank) {
+    const tags = ['Emergency Food']; // Default tag
+    
+    try {
+      const inventory = this.inventoryService.getInventoryByFoodBank(foodBank.id);
+      const categories = new Set();
+      const allergenFree = new Set();
+      
+      inventory.forEach(item => {
+        // Add categories
+        if (item.category) {
+          categories.add(item.category);
+        }
+        
+        // Check for allergen-free items
+        if (!item.allergens || item.allergens.length === 0) {
+          allergenFree.add('Allergen-Free Options');
+        } else {
+          // Check for specific allergen-free categories
+          if (!item.allergens.includes('gluten')) allergenFree.add('Gluten-Free');
+          if (!item.allergens.includes('dairy')) allergenFree.add('Dairy-Free');
+          if (!item.allergens.includes('nuts')) allergenFree.add('Nut-Free');
+        }
+      });
+      
+      // Add category tags
+      categories.forEach(category => {
+        switch (category) {
+          case 'fresh-produce':
+            tags.push('Fresh Produce');
+            break;
+          case 'canned-goods':
+            tags.push('Canned Goods');
+            break;
+          case 'dairy':
+            tags.push('Dairy Products');
+            break;
+          case 'meat':
+            tags.push('Meat & Protein');
+            break;
+          case 'grains':
+            tags.push('Grains & Bread');
+            break;
+          case 'frozen':
+            tags.push('Frozen Items');
+            break;
+        }
+      });
+      
+      // Add allergen-free tags
+      allergenFree.forEach(tag => tags.push(tag));
+      
+      // Add cultural/religious tags if applicable
+      if (foodBank.city === 'Halifax' && inventory.length > 50) {
+        tags.push('Halal Options');
+      }
+      
+      return tags.slice(0, 8); // Limit to 8 tags
+      
+    } catch (error) {
+      console.error('Error generating tags for food bank:', error);
+      return ['Emergency Food', 'Community Support'];
+    }
   }
 }
 

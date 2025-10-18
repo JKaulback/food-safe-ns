@@ -9,6 +9,7 @@ const FoodBankCard = ({ foodBank }) => {
     address,
     phone,
     hours,
+    formattedHours,
     tags,
     inventoryCount,
     availabilityStatus
@@ -60,18 +61,24 @@ const FoodBankCard = ({ foodBank }) => {
         </div>
         <div className="info-row">
           <span>🕒</span>
-          <span>{hours}</span>
+          <span>{formattedHours || hours || 'Hours not available'}</span>
         </div>
       </div>
 
       <div className="food-bank-tags">
-        {tags.slice(0, 6).map(tag => (
-          <span key={tag} className="tag">
-            {tag}
-          </span>
-        ))}
-        {tags.length > 6 && (
-          <span className="tag">+{tags.length - 6} more</span>
+        {tags && tags.length > 0 ? (
+          <>
+            {tags.slice(0, 6).map(tag => (
+              <span key={tag} className="tag">
+                {tag}
+              </span>
+            ))}
+            {tags.length > 6 && (
+              <span className="tag">+{tags.length - 6} more</span>
+            )}
+          </>
+        ) : (
+          <span className="tag">No tags available</span>
         )}
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { foodBankAPI, inventoryAPI, apiUtils } from '../services/api';
@@ -18,17 +18,7 @@ const FoodBankDetails = () => {
   const [allergenFilter, setAllergenFilter] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('');
 
-  useEffect(() => {
-    loadFoodBankDetails();
-  }, [id]);
-
-  useEffect(() => {
-    if (activeTab === 'inventory') {
-      loadInventory();
-    }
-  }, [activeTab, allergenFilter, categoryFilter]);
-
-  const loadFoodBankDetails = async () => {
+  const loadFoodBankDetails = useCallback(async () => {
     try {
       setLoading(true);
       const details = await foodBankAPI.getFoodBankById(id);
@@ -58,9 +48,9 @@ const FoodBankDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const loadInventory = async () => {
+  const loadInventory = useCallback(async () => {
     try {
       setInventoryLoading(true);
       const inventoryData = await inventoryAPI.getInventory(id, {
@@ -75,41 +65,63 @@ const FoodBankDetails = () => {
       setInventory([
         {
           id: 'item-1',
-          name: 'Canned Tomatoes',
-          category: 'canned-goods',
-          quantity: 45,
-          allergens: [],
-          expiryDate: '2025-12-31'
+          name: 'Whole Grain Pasta',
+          category: 'grains',
+          quantity: 26,
+          allergens: ['gluten'],
+          expiryDate: '2025-12-31',
+          image: '/api/placeholder/300/200',
+          tags: ['Vegetarian', 'Vegan'],
+          brand: 'Great Value'
         },
         {
           id: 'item-2',
-          name: 'Fresh Apples',
-          category: 'fresh-produce',
-          quantity: 23,
+          name: 'Canned Black Beans',
+          category: 'canned-goods',
+          quantity: 48,
           allergens: [],
-          expiryDate: '2025-02-15'
+          expiryDate: '2025-08-15',
+          image: '/api/placeholder/300/200',
+          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
+          brand: 'Great Value'
         },
         {
           id: 'item-3',
-          name: 'Whole Wheat Bread',
+          name: 'Millet & Brown Rice Ramen Noodles',
           category: 'grains',
           quantity: 12,
-          allergens: ['gluten'],
-          expiryDate: '2025-02-10'
+          allergens: [],
+          expiryDate: '2025-06-10',
+          image: '/api/placeholder/300/200',
+          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
+          brand: 'Lotus Foods'
         },
         {
           id: 'item-4',
-          name: 'Milk (2%)',
-          category: 'dairy',
-          quantity: 8,
-          allergens: ['dairy'],
-          expiryDate: '2025-02-08'
+          name: 'Natural Peanut Butter',
+          category: 'spreads',
+          quantity: 15,
+          allergens: ['peanuts'],
+          expiryDate: '2025-09-08',
+          image: '/api/placeholder/300/200',
+          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
+          brand: 'Skippy'
         }
       ]);
     } finally {
       setInventoryLoading(false);
     }
-  };
+  }, [id, allergenFilter, categoryFilter]);
+
+  useEffect(() => {
+    loadFoodBankDetails();
+  }, [loadFoodBankDetails]);
+
+  useEffect(() => {
+    if (activeTab === 'inventory') {
+      loadInventory();
+    }
+  }, [activeTab, loadInventory]);
 
   const handleAllergenToggle = (allergen) => {
     setAllergenFilter(prev => 
@@ -230,7 +242,8 @@ const FoodBankDetails = () => {
                 <div>
                   <strong>Hours:</strong>
                   <div style={{ marginTop: '0.25rem', color: 'var(--text-gray)' }}>
-                    {foodBank.formattedHours || foodBank.hours || 'Call for hours'}
+                    {foodBank.formattedHours || 
+                     (typeof foodBank.hours === 'string' ? foodBank.hours : 'Call for hours')}
                   </div>
                 </div>
                 
@@ -353,6 +366,28 @@ const FoodBankDetails = () => {
 
           {activeTab === 'inventory' && (
             <div>
+              {/* Real-time Inventory Notice */}
+              <div style={{
+                backgroundColor: '#dbeafe',
+                border: '1px solid #93c5fd',
+                borderRadius: '8px',
+                padding: '1rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <span style={{ fontSize: '1.25rem' }}>ℹ️</span>
+                <div>
+                  <div style={{ fontWeight: '600', color: '#1e40af', fontSize: '0.875rem' }}>
+                    Real-time Inventory
+                  </div>
+                  <div style={{ color: '#1e40af', fontSize: '0.75rem' }}>
+                    This inventory is updated in real-time. Click on any item to see detailed nutritional information and allergen details.
+                  </div>
+                </div>
+              </div>
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: '600' }}>
                   Current Inventory
@@ -375,6 +410,7 @@ const FoodBankDetails = () => {
                     <option value="dairy">Dairy</option>
                     <option value="meat">Meat & Protein</option>
                     <option value="grains">Grains & Bread</option>
+                    <option value="spreads">Spreads</option>
                     <option value="frozen">Frozen Items</option>
                   </select>
                 </div>
@@ -386,7 +422,7 @@ const FoodBankDetails = () => {
                   Filter by Allergens (exclude these):
                 </h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                  {['gluten', 'dairy', 'nuts', 'soy', 'eggs', 'fish', 'shellfish'].map(allergen => (
+                  {['gluten', 'dairy', 'nuts', 'peanuts', 'soy', 'eggs', 'fish', 'shellfish'].map(allergen => (
                     <button
                       key={allergen}
                       onClick={() => handleAllergenToggle(allergen)}
@@ -412,8 +448,8 @@ const FoodBankDetails = () => {
               ) : inventory.length > 0 ? (
                 <div style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
-                  gap: '1rem' 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                  gap: '1.5rem' 
                 }}>
                   {inventory
                     .filter(item => !categoryFilter || item.category === categoryFilter)
@@ -424,63 +460,167 @@ const FoodBankDetails = () => {
                         style={{
                           backgroundColor: 'white',
                           border: '1px solid #e5e7eb',
-                          borderRadius: '8px',
-                          padding: '1rem'
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                          transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
                         }}
                       >
-                        <h4 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-                          {item.name}
-                        </h4>
-                        
-                        <div style={{ marginBottom: '0.75rem' }}>
-                          <span style={{ 
-                            fontSize: '0.875rem',
-                            color: 'var(--text-gray)',
-                            textTransform: 'capitalize'
-                          }}>
-                            {item.category?.replace('-', ' ')}
-                          </span>
-                          {item.quantity && (
-                            <span style={{ 
-                              marginLeft: '0.5rem',
-                              fontSize: '0.875rem',
-                              fontWeight: '600',
-                              color: item.quantity > 10 ? '#059669' : item.quantity > 5 ? '#d97706' : '#dc2626'
+                        {/* Product Image */}
+                        <div style={{
+                          width: '100%',
+                          height: '200px',
+                          backgroundColor: '#f3f4f6',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          position: 'relative',
+                          backgroundImage: item.image ? `url(${item.image})` : 'none',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}>
+                          {!item.image && (
+                            <div style={{
+                              fontSize: '3rem',
+                              color: '#9ca3af'
                             }}>
-                              • {item.quantity} available
+                              📦
+                            </div>
+                          )}
+                          
+                          {/* Quantity Badge */}
+                          <div style={{
+                            position: 'absolute',
+                            top: '12px',
+                            right: '12px',
+                            backgroundColor: item.quantity > 20 ? '#10b981' : item.quantity > 10 ? '#f59e0b' : '#ef4444',
+                            color: 'white',
+                            padding: '4px 8px',
+                            borderRadius: '12px',
+                            fontSize: '0.75rem',
+                            fontWeight: '600'
+                          }}>
+                            {item.quantity}
+                          </div>
+                        </div>
+
+                        {/* Card Content */}
+                        <div style={{ padding: '1rem' }}>
+                          {/* Product Name */}
+                          <h3 style={{ 
+                            fontSize: '1rem', 
+                            fontWeight: '600', 
+                            marginBottom: '0.5rem',
+                            color: '#111827',
+                            lineHeight: '1.4'
+                          }}>
+                            {item.name}
+                          </h3>
+                          
+                          {/* Brand and Category */}
+                          <div style={{ 
+                            fontSize: '0.875rem',
+                            color: '#6b7280',
+                            marginBottom: '0.75rem'
+                          }}>
+                            {item.brand && <span>{item.brand}</span>}
+                            {item.brand && item.category && <span> • </span>}
+                            <span style={{ textTransform: 'capitalize' }}>
+                              {item.category?.replace('-', ' ')}
                             </span>
+                          </div>
+
+                          {/* Dietary Tags */}
+                          {item.tags && item.tags.length > 0 && (
+                            <div style={{ 
+                              display: 'flex', 
+                              flexWrap: 'wrap', 
+                              gap: '0.5rem',
+                              marginBottom: '0.75rem'
+                            }}>
+                              {item.tags.map(tag => {
+                                let tagColor = '#10b981'; // Default green for Vegetarian
+                                if (tag === 'Vegan') tagColor = '#059669';
+                                if (tag === 'Gluten-Free') tagColor = '#0891b2';
+                                
+                                return (
+                                  <span
+                                    key={tag}
+                                    style={{
+                                      fontSize: '0.75rem',
+                                      backgroundColor: tagColor,
+                                      color: 'white',
+                                      padding: '2px 8px',
+                                      borderRadius: '10px',
+                                      fontWeight: '500'
+                                    }}
+                                  >
+                                    {tag}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
+                          
+                          {/* Allergen Warning */}
+                          {item.allergens && item.allergens.length > 0 && (
+                            <div style={{ 
+                              backgroundColor: '#fef2f2',
+                              border: '1px solid #fecaca',
+                              borderRadius: '6px',
+                              padding: '0.5rem',
+                              marginBottom: '0.75rem'
+                            }}>
+                              <div style={{ 
+                                fontSize: '0.75rem', 
+                                color: '#dc2626', 
+                                fontWeight: '600',
+                                marginBottom: '0.25rem'
+                              }}>
+                                ⚠️ Contains:
+                              </div>
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                                {item.allergens.map(allergen => (
+                                  <span
+                                    key={allergen}
+                                    style={{
+                                      fontSize: '0.75rem',
+                                      backgroundColor: '#dc2626',
+                                      color: 'white',
+                                      padding: '2px 6px',
+                                      borderRadius: '8px',
+                                      fontWeight: '500',
+                                      textTransform: 'capitalize'
+                                    }}
+                                  >
+                                    {allergen}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Expiry Date */}
+                          {item.expiryDate && (
+                            <div style={{ 
+                              fontSize: '0.75rem', 
+                              color: '#6b7280',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.25rem'
+                            }}>
+                              📅 Best by: {new Date(item.expiryDate).toLocaleDateString()}
+                            </div>
                           )}
                         </div>
-                        
-                        {item.allergens && item.allergens.length > 0 && (
-                          <div style={{ marginBottom: '0.5rem' }}>
-                            <div style={{ fontSize: '0.75rem', color: '#dc2626', marginBottom: '0.25rem' }}>
-                              Contains:
-                            </div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                              {item.allergens.map(allergen => (
-                                <span
-                                  key={allergen}
-                                  style={{
-                                    fontSize: '0.75rem',
-                                    backgroundColor: '#fee2e2',
-                                    color: '#dc2626',
-                                    padding: '0.125rem 0.5rem',
-                                    borderRadius: '10px'
-                                  }}
-                                >
-                                  {allergen}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {item.expiryDate && (
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-gray)' }}>
-                            Best by: {new Date(item.expiryDate).toLocaleDateString()}
-                          </div>
-                        )}
                       </div>
                     ))}
                 </div>
