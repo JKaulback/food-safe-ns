@@ -1,13 +1,14 @@
 [
   {
     "id": "inv-001",
-    "allergens": ["gluten-free", "nut-free", "dairy-free"],
-    "category": "Grains",
+    "allergens": ["gluten"],
+    "category": "grains",
     "expiryDate": "2025-05-12",
     "foodBankId": "halifax-fb-1",
-    "name": "Gluten-Free Pasta",
+    "name": "Whole Grain Pasta",
+    "brand": "Barilla",
     "quantity": 50,
-    "culturalTags": ["vegan", "vegetarian"],
+    "tags": ["vegetarian"],
     "nutritionalInfo": {
       "calories": 210,
       "protein": 4,
@@ -16,13 +17,14 @@
   },
   {
     "id": "inv-002",
-    "allergens": ["dairy-free", "gluten-free", "nut-free"],
-    "category": "Proteins",
+    "allergens": [],
+    "category": "canned-goods",
     "expiryDate": "2025-03-15",
     "foodBankId": "halifax-fb-1",
-    "name": "Canned Black Beans",
+    "name": "Black Beans",
+    "brand": "Bush's",
     "quantity": 75,
-    "culturalTags": ["vegan", "vegetarian", "halal", "kosher"],
+    "tags": ["vegan", "vegetarian", "gluten-free"],
     "nutritionalInfo": {
       "calories": 245,
       "protein": 15,
@@ -31,13 +33,14 @@
   },
   {
     "id": "inv-003",
-    "allergens": ["contains-dairy"],
-    "category": "Dairy",
+    "allergens": ["dairy"],
+    "category": "dairy",
     "expiryDate": "2025-01-20",
     "foodBankId": "halifax-fb-1",
     "name": "Evaporated Milk",
+    "brand": "Carnation",
     "quantity": 30,
-    "culturalTags": ["vegetarian"],
+    "tags": ["vegetarian"],
     "nutritionalInfo": {
       "calories": 338,
       "protein": 17,
@@ -46,13 +49,14 @@
   },
   {
     "id": "inv-004",
-    "allergens": ["gluten-free", "dairy-free", "nut-free"],
-    "category": "Vegetables",
+    "allergens": [],
+    "category": "canned-goods",
     "expiryDate": "2025-06-01",
-    "foodBankId": "dartmouth-fb-1",
-    "name": "Canned Corn",
+    "foodBankId": "halifax-fb-1",
+    "name": "Sweet Corn",
+    "brand": "Green Giant",
     "quantity": 100,
-    "culturalTags": ["vegan", "vegetarian", "halal", "kosher"],
+    "tags": ["vegan", "vegetarian", "gluten-free"],
     "nutritionalInfo": {
       "calories": 132,
       "protein": 5,
@@ -61,13 +65,14 @@
   },
   {
     "id": "inv-005",
-    "allergens": ["contains-gluten"],
-    "category": "Grains",
+    "allergens": ["gluten"],
+    "category": "grains",
     "expiryDate": "2025-04-10",
-    "foodBankId": "dartmouth-fb-1",
+    "foodBankId": "halifax-fb-1",
     "name": "Whole Wheat Bread",
+    "brand": "Wonder",
     "quantity": 25,
-    "culturalTags": ["vegetarian"],
+    "tags": ["vegetarian"],
     "nutritionalInfo": {
       "calories": 247,
       "protein": 13,
@@ -76,13 +81,14 @@
   },
   {
     "id": "inv-006",
-    "allergens": ["contains-nuts"],
-    "category": "Snacks",
+    "allergens": ["peanuts"],
+    "category": "spreads",
     "expiryDate": "2025-08-15",
-    "foodBankId": "dartmouth-fb-1",
-    "name": "Mixed Nuts",
+    "foodBankId": "halifax-fb-1",
+    "name": "Peanut Butter",
+    "brand": "Jif",
     "quantity": 40,
-    "culturalTags": ["vegetarian", "vegan"],
+    "tags": ["vegetarian", "gluten-free"],
     "nutritionalInfo": {
       "calories": 607,
       "protein": 20,
@@ -91,13 +97,14 @@
   },
   {
     "id": "inv-007",
-    "allergens": ["dairy-free", "gluten-free", "nut-free"],
-    "category": "Proteins",
+    "allergens": [],
+    "category": "canned-goods",
     "expiryDate": "2025-12-01",
-    "foodBankId": "sydney-fb-1",
-    "name": "Canned Tuna",
+    "foodBankId": "dartmouth-fb-1",
+    "name": "Tuna in Water",
+    "brand": "StarKist",
     "quantity": 60,
-    "culturalTags": ["halal"],
+    "tags": ["gluten-free"],
     "nutritionalInfo": {
       "calories": 179,
       "protein": 39,
@@ -106,13 +113,14 @@
   },
   {
     "id": "inv-008",
-    "allergens": ["contains-eggs", "contains-dairy", "contains-gluten"],
-    "category": "Baked Goods",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "grains",
     "expiryDate": "2025-02-05",
-    "foodBankId": "sydney-fb-1",
-    "name": "Chocolate Cake Mix",
+    "foodBankId": "dartmouth-fb-1",
+    "name": "Pancake Mix",
+    "brand": "Aunt Jemima",
     "quantity": 15,
-    "culturalTags": ["vegetarian"],
+    "tags": ["vegetarian"],
     "nutritionalInfo": {
       "calories": 320,
       "protein": 4,
@@ -121,13 +129,14 @@
   },
   {
     "id": "inv-009",
-    "allergens": ["gluten-free", "dairy-free", "nut-free"],
-    "category": "Fruits",
+    "allergens": [],
+    "category": "canned-goods",
     "expiryDate": "2025-07-20",
-    "foodBankId": "truro-fb-1",
-    "name": "Canned Peaches in Juice",
+    "foodBankId": "dartmouth-fb-1",
+    "name": "Diced Tomatoes",
+    "brand": "Hunt's",
     "quantity": 80,
-    "culturalTags": ["vegan", "vegetarian", "halal", "kosher"],
+    "tags": ["vegan", "vegetarian", "gluten-free"],
     "nutritionalInfo": {
       "calories": 109,
       "protein": 2,
@@ -136,197 +145,18 @@
   },
   {
     "id": "inv-010",
-    "allergens": ["contains-fish"],
-    "category": "Proteins",
-    "expiryDate": "2025-05-30",
-    "foodBankId": "truro-fb-1",
-    "name": "Canned Salmon",
-    "quantity": 35,
-    "culturalTags": ["halal"],
-    "nutritionalInfo": {
-      "calories": 206,
-      "protein": 28,
-      "carbohydrates": 0
-    }
-  },
-  {
-    "id": "inv-011",
-    "allergens": ["vegan", "gluten-free", "dairy-free", "nut-free"],
-    "category": "Vegetables",
-    "expiryDate": "2025-09-15",
-    "foodBankId": "bridgewater-fb-1",
-    "name": "Canned Green Beans",
-    "quantity": 90,
-    "culturalTags": ["vegan", "vegetarian", "halal", "kosher"],
-    "nutritionalInfo": {
-      "calories": 35,
-      "protein": 2,
-      "carbohydrates": 8
-    }
-  },
-  {
-    "id": "inv-012",
-    "allergens": ["dairy-free", "gluten-free"],
-    "category": "Proteins",
-    "expiryDate": "2025-04-25",
-    "foodBankId": "bridgewater-fb-1",
-    "name": "Halal Chicken Soup",
-    "quantity": 45,
-    "culturalTags": ["halal"],
-    "nutritionalInfo": {
-      "calories": 60,
-      "protein": 3,
-      "carbohydrates": 8
-    }
-  },
-  {
-    "id": "inv-013",
-    "allergens": ["contains-dairy"],
-    "category": "Dairy",
-    "expiryDate": "2025-03-10",
-    "foodBankId": "halifax-fb-1",
-    "name": "Kosher Cheese Slices",
-    "quantity": 20,
-    "culturalTags": ["kosher", "vegetarian"],
-    "nutritionalInfo": {
-      "calories": 113,
-      "protein": 7,
-      "carbohydrates": 1
-    }
-  },
-  {
-    "id": "inv-014",
-    "allergens": ["gluten-free", "dairy-free", "nut-free"],
-    "category": "Grains",
+    "allergens": [],
+    "category": "grains",
     "expiryDate": "2025-11-30",
-    "foodBankId": "sydney-fb-1",
-    "name": "Organic Brown Rice",
+    "foodBankId": "dartmouth-fb-1",
+    "name": "Brown Rice",
+    "brand": "Uncle Ben's",
     "quantity": 55,
-    "culturalTags": ["organic", "vegan", "vegetarian", "halal", "kosher"],
+    "tags": ["vegan", "vegetarian", "gluten-free"],
     "nutritionalInfo": {
       "calories": 216,
       "protein": 5,
       "carbohydrates": 45
-    }
-  },
-  {
-    "id": "inv-015",
-    "allergens": ["contains-dairy"],
-    "category": "Proteins",
-    "expiryDate": "2025-06-18",
-    "foodBankId": "truro-fb-1",
-    "name": "Vegetarian Chili with Cheese",
-    "quantity": 40,
-    "culturalTags": ["vegetarian"],
-    "nutritionalInfo": {
-      "calories": 180,
-      "protein": 12,
-      "carbohydrates": 20
-    }
-  },
-  {
-    "id": "inv-016",
-    "allergens": ["contains-sesame", "nut-free"],
-    "category": "Condiments",
-    "expiryDate": "2025-10-05",
-    "foodBankId": "dartmouth-fb-1",
-    "name": "Tahini Sauce",
-    "quantity": 25,
-    "culturalTags": ["vegan", "vegetarian", "halal"],
-    "nutritionalInfo": {
-      "calories": 119,
-      "protein": 3,
-      "carbohydrates": 4
-    }
-  },
-  {
-    "id": "inv-017",
-    "allergens": ["gluten-free", "dairy-free", "nut-free"],
-    "category": "Beverages",
-    "expiryDate": "2025-08-30",
-    "foodBankId": "halifax-fb-1",
-    "name": "100% Apple Juice",
-    "quantity": 70,
-    "culturalTags": ["vegan", "vegetarian", "halal", "kosher"],
-    "nutritionalInfo": {
-      "calories": 114,
-      "protein": 0,
-      "carbohydrates": 28
-    }
-  },
-  {
-    "id": "inv-018",
-    "allergens": ["contains-soy"],
-    "category": "Condiments",
-    "expiryDate": "2025-12-15",
-    "foodBankId": "sydney-fb-1",
-    "name": "Low Sodium Soy Sauce",
-    "quantity": 30,
-    "culturalTags": ["vegan", "vegetarian", "low-sodium"],
-    "nutritionalInfo": {
-      "calories": 8,
-      "protein": 1,
-      "carbohydrates": 1
-    }
-  },
-  {
-    "id": "inv-019",
-    "allergens": ["gluten-free", "dairy-free", "nut-free"],
-    "category": "Proteins",
-    "expiryDate": "2025-05-08",
-    "foodBankId": "truro-fb-1",
-    "name": "Organic Lentil Soup",
-    "quantity": 65,
-    "culturalTags": ["vegan", "vegetarian", "organic", "halal", "kosher"],
-    "nutritionalInfo": {
-      "calories": 140,
-      "protein": 9,
-      "carbohydrates": 23
-    }
-  },
-  {
-    "id": "inv-020",
-    "allergens": ["contains-gluten", "contains-eggs"],
-    "category": "Grains",
-    "expiryDate": "2025-02-28",
-    "foodBankId": "bridgewater-fb-1",
-    "name": "Egg Noodles",
-    "quantity": 35,
-    "culturalTags": ["vegetarian"],
-    "nutritionalInfo": {
-      "calories": 221,
-      "protein": 7,
-      "carbohydrates": 40
-    }
-  },
-  {
-    "id": "inv-021",
-    "allergens": ["baby-food", "gluten-free", "dairy-free"],
-    "category": "Baby Food",
-    "expiryDate": "2025-03-20",
-    "foodBankId": "halifax-fb-1",
-    "name": "Baby Sweet Potato Puree",
-    "quantity": 40,
-    "culturalTags": ["baby-food", "organic"],
-    "nutritionalInfo": {
-      "calories": 60,
-      "protein": 1,
-      "carbohydrates": 14
-    }
-  },
-  {
-    "id": "inv-022",
-    "allergens": ["gluten-free", "dairy-free", "diabetic-friendly"],
-    "category": "Vegetables",
-    "expiryDate": "2025-04-15",
-    "foodBankId": "dartmouth-fb-1",
-    "name": "Sugar-Free Canned Tomatoes",
-    "quantity": 60,
-    "culturalTags": ["diabetic-friendly", "vegan", "vegetarian"],
-    "nutritionalInfo": {
-      "calories": 32,
-      "protein": 2,
-      "carbohydrates": 7
     }
   }
 ]

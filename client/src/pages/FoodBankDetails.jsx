@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { foodBankAPI, inventoryAPI, apiUtils } from '../services/api';
+import { getProductImage, getAllergens, getDietaryTags, getCategoryIcon, getDisplayName } from '../utils/productUtils';
 
 const FoodBankDetails = () => {
   const { id } = useParams();
@@ -61,53 +62,57 @@ const FoodBankDetails = () => {
     } catch (error) {
       console.error('Error loading inventory:', error);
       
-      // Fallback to mock inventory data
-      setInventory([
+      // Fallback to mock inventory data with real working OpenFoodFacts images
+      const fallbackData = [
         {
           id: 'item-1',
-          name: 'Whole Grain Pasta',
+          name: 'Spaghetti Pasta',
           category: 'grains',
           quantity: 26,
           allergens: ['gluten'],
           expiryDate: '2025-12-31',
-          image: '/api/placeholder/300/200',
+          image: 'https://images.openfoodfacts.org/images/products/807/680/019/5057/front_en.3428.400.jpg',
           tags: ['Vegetarian', 'Vegan'],
-          brand: 'Great Value'
+          brand: 'Barilla'
         },
         {
           id: 'item-2',
-          name: 'Canned Black Beans',
-          category: 'canned-goods',
+          name: 'Nutella Spread',
+          category: 'spreads',
           quantity: 48,
-          allergens: [],
+          allergens: ['milk', 'nuts'],
           expiryDate: '2025-08-15',
-          image: '/api/placeholder/300/200',
-          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
-          brand: 'Great Value'
+          image: 'https://images.openfoodfacts.org/images/products/301/762/401/0701/front_en.54.400.jpg',
+          tags: ['Contains Nuts'],
+          brand: 'Ferrero'
         },
         {
           id: 'item-3',
-          name: 'Millet & Brown Rice Ramen Noodles',
-          category: 'grains',
+          name: 'Chocolate Cookies',
+          category: 'snacks',
           quantity: 12,
-          allergens: [],
+          allergens: ['milk', 'gluten'],
           expiryDate: '2025-06-10',
-          image: '/api/placeholder/300/200',
-          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
-          brand: 'Lotus Foods'
+          image: 'https://images.openfoodfacts.org/images/products/762/221/098/9604/front_en.11.400.jpg',
+          tags: ['Contains Dairy', 'Contains Gluten'],
+          brand: 'Cadbury'
         },
         {
           id: 'item-4',
-          name: 'Natural Peanut Butter',
-          category: 'spreads',
+          name: 'Test Product',
+          category: 'other',
           quantity: 15,
-          allergens: ['peanuts'],
+          allergens: [],
           expiryDate: '2025-09-08',
-          image: '/api/placeholder/300/200',
-          tags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
-          brand: 'Skippy'
+          image: 'https://picsum.photos/300/200?random=4',
+          tags: ['Test Item'],
+          brand: 'Test Brand'
         }
-      ]);
+      ];
+      
+      console.log('Setting fallback inventory data:', fallbackData);
+      console.log('First item image URL:', fallbackData[0].image);
+      setInventory(fallbackData);
     } finally {
       setInventoryLoading(false);
     }
@@ -453,7 +458,7 @@ const FoodBankDetails = () => {
                 }}>
                   {inventory
                     .filter(item => !categoryFilter || item.category === categoryFilter)
-                    .filter(item => allergenFilter.length === 0 || !item.allergens?.some(allergen => allergenFilter.includes(allergen)))
+                    .filter(item => allergenFilter.length === 0 || !getAllergens(item).some(allergen => allergenFilter.includes(allergen)))
                     .map(item => (
                       <div
                         key={item.id}
@@ -483,16 +488,16 @@ const FoodBankDetails = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           position: 'relative',
-                          backgroundImage: item.image ? `url(${item.image})` : 'none',
+                          backgroundImage: getProductImage(item) ? `url(${getProductImage(item)})` : 'none',
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}>
-                          {!item.image && (
+                          {!getProductImage(item) && (
                             <div style={{
                               fontSize: '3rem',
                               color: '#9ca3af'
                             }}>
-                              📦
+                              {getCategoryIcon(item.category)}
                             </div>
                           )}
                           
@@ -522,7 +527,7 @@ const FoodBankDetails = () => {
                             color: '#111827',
                             lineHeight: '1.4'
                           }}>
-                            {item.name}
+                            {getDisplayName(item)}
                           </h3>
                           
                           {/* Brand and Category */}
@@ -539,17 +544,18 @@ const FoodBankDetails = () => {
                           </div>
 
                           {/* Dietary Tags */}
-                          {item.tags && item.tags.length > 0 && (
+                          {getDietaryTags(item).length > 0 && (
                             <div style={{ 
                               display: 'flex', 
                               flexWrap: 'wrap', 
                               gap: '0.5rem',
                               marginBottom: '0.75rem'
                             }}>
-                              {item.tags.map(tag => {
+                              {getDietaryTags(item).map(tag => {
                                 let tagColor = '#10b981'; // Default green for Vegetarian
                                 if (tag === 'Vegan') tagColor = '#059669';
                                 if (tag === 'Gluten-Free') tagColor = '#0891b2';
+                                if (tag === 'Organic') tagColor = '#65a30d';
                                 
                                 return (
                                   <span
@@ -571,7 +577,7 @@ const FoodBankDetails = () => {
                           )}
                           
                           {/* Allergen Warning */}
-                          {item.allergens && item.allergens.length > 0 && (
+                          {getAllergens(item).length > 0 && (
                             <div style={{ 
                               backgroundColor: '#fef2f2',
                               border: '1px solid #fecaca',
@@ -588,7 +594,7 @@ const FoodBankDetails = () => {
                                 ⚠️ Contains:
                               </div>
                               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                                {item.allergens.map(allergen => (
+                                {getAllergens(item).map(allergen => (
                                   <span
                                     key={allergen}
                                     style={{

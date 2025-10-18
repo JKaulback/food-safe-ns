@@ -1,4 +1,6 @@
 const inventoryData = require('../data/sample-inventory.json');
+const openFoodFactsService = require('./OpenFoodFactsService');
+const { enhanceWithStaticData } = require('../utils/staticProductImages');
 
 /**
  * Service for managing food inventory operations
@@ -7,6 +9,7 @@ const inventoryData = require('../data/sample-inventory.json');
 class InventoryService {
   constructor() {
     this.inventory = inventoryData;
+    this.enhancedCache = new Map(); // Cache for enhanced inventory items
   }
 
   /**
@@ -143,6 +146,71 @@ class InventoryService {
   getAvailableCategories(foodBankId) {
     const items = this.getInventoryByFoodBank(foodBankId);
     return [...new Set(items.map(item => item.category))];
+  }
+
+  /**
+   * Get enhanced inventory with OpenFoodFacts data and static fallbacks
+   * @param {string} foodBankId - The food bank ID
+   * @param {object} filters - Filter options (allergens, category)
+   * @returns {Promise<array>} Enhanced inventory items with images and additional data
+   */
+  async getEnhancedInventory(foodBankId, filters = {}) {
+    const baseItems = this.getFilteredInventory(foodBankId, filters);
+    const enhancedItems = [];
+
+    console.log(`🔧 Enhancing ${baseItems.length} inventory items for food bank ${foodBankId}`);
+
+    for (const item of baseItems) {
+      const cacheKey = `${item.id}_${item.name}_${item.brand}`;
+      
+      // Check cache first
+      if (this.enhancedCache.has(cacheKey)) {
+        enhancedItems.push(this.enhancedCache.get(cacheKey));
+        continue;
+      }
+
+      try {
+        let enhanced = item;
+
+        // First try OpenFoodFacts API
+        try {
+          enhanced = await openFoodFactsService.enhanceInventoryItem(item);
+        } catch (apiError) {
+          console.log(`⚠️ OpenFoodFacts API failed for ${item.name}, trying static fallback`);
+        }
+
+        // If no image from API, try static mapping
+        if (!enhanced.image) {
+          enhanced = enhanceWithStaticData(enhanced);
+        }
+
+        // Add dietary tags from OpenFoodFacts if available
+        if (enhanced.openFoodFactsData && enhanced.openFoodFactsData.labels) {
+          const dietaryTags = openFoodFactsService.getDietaryTags(enhanced.openFoodFactsData.labels);
+          enhanced.tags = [...(enhanced.tags || []), ...dietaryTags];
+          // Remove duplicates
+          enhanced.tags = [...new Set(enhanced.tags)];
+        }
+
+        // Cache the enhanced item
+        this.enhancedCache.set(cacheKey, enhanced);
+        enhancedItems.push(enhanced);
+      } catch (error) {
+        console.error(`❌ Error enhancing item ${item.name}:`, error.message);
+        // Fall back to original item if enhancement fails
+        enhancedItems.push(item);
+      }
+    }
+
+    console.log(`✅ Enhanced ${enhancedItems.length} inventory items`);
+    return enhancedItems;
+  }
+
+  /**
+   * Clear the enhancement cache (useful for testing or cache refresh)
+   */
+  clearEnhancementCache() {
+    this.enhancedCache.clear();
   }
 }
 
